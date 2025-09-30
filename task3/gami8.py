@@ -1,14 +1,13 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 app = Ursina()
-#sky-----------------------------------------------------------------------------------------------------
-sky = Sky()
+sky=Sky()
+#lighting 
+DirectionalLight(y=2,rotation=(45,-45,0),shadows =True)
 
-#lighting --------------------------------------------------------------------------------------------
-DirectionalLight(y=2,rotation=(45,-45,0),shadows=True)
-AmbientLight(color=color.rgba(100,100,100,0.5))
+AmbientLight(color=color.rgba(100,100,100,.5))
 
-#ground ----------------------------------------------------------------------------------------------------
+#ground----------------------------------
 ground=Entity(
     model='cube',
     scale=(20,1,20),
@@ -17,12 +16,12 @@ ground=Entity(
     position=(0,-0.5,0)
 )
 #player--------------------------------------------------------------------------------------------------------- ---
-player= FirstPersonController()
+player=FirstPersonController()
 player.y=2
 player.gravity=0.5
 player.cursor.visible=True
 
-#Wall ---------------------------------------------------------------------------------------------------------------
+#wall ---------------------------------------------------------------------------------------------------------------
 wall=Entity(
     model='cube',
     color=color.gray,
@@ -34,10 +33,10 @@ wall_lifted=False
 wall_lift_distance=3  ########### distance to interact
 #blue boxes: to add points 
 # treasure glb to replace blue boxes-------------------------------------------- ---
-box_positions=[(2,0.5,5),(-2,0.5,7),(4,0.5,8)]
+box_position=[(2,0.5,5),(-2,0.5,7),(4,0.5,8)]
 boxes =[]
 boxes_spun=[]
-for pos in box_positions:
+for pos in box_position:
     b = Entity(
         model='models/boxi.glb',  #  glb model
         color=color.white,        
@@ -48,26 +47,23 @@ for pos in box_positions:
     boxes.append(b)
     boxes_spun.append(False)
 
-
 box_spin_distance = 2  # distance to interact
-
+    
 
 #red boxes: subtract point------------------------------------- ---
-red_box_positions = [(-3,0.5,4), (3,0.5,6), (0,0.5,8)]
-red_boxes = []
-red_boxes_hit = []
-for pos in red_box_positions:
+red_box_position=[(-3,0.5,4) , (3,0.5,6) , (0,0.5,8)]
+red_boxes=[]
+red_boxes_hit=[]
+for pos in red_box_position:
     r = Entity(
-        model='models/danger.glb',  # your GLB danger model
-        color=color.red,            # optional tint
+        model='models/danger.glb',  #  glb danger model
+        color=color.red,            
         scale=1.5,                  # scale down to fit the scene
         position=pos,
         collider='box'
     )
     red_boxes.append(r)
     red_boxes_hit.append(False)
-
-
 red_box_distance=2  # distance to interact
 
 #ui----------------------------------------------------
@@ -80,12 +76,11 @@ interaction_text = Text(
 
 score=0
 score_text=Text(
-    text=f'Score: -{score}',
+    text=f'Score: :{score}',
     position=(-0.85, 0.35),
     scale=2,
     color=color.lime
 )
-
 points_display=Text(
     text='',
     position=(0,0.3),  
@@ -98,12 +93,9 @@ win_text = Text(
     scale=3,
     color=color.orange
 )
-
 #  updating function ----------------------------------
 def update():
-    global wall_lifted, score
-
-   
+    global wall_lifted, score   
     interaction_text.text = ''
     points_display.text = ''
 
@@ -117,10 +109,10 @@ def update():
                 win_text.text ='You Won!'
                 print("Wall lifted! You won!")
         elif not wall_lifted:
-            interaction_text.text = 'Gain 100 points to open the door'
+            interaction_text.text='Collect 100 points to open the door'
 
     #blue boxes to add points -------------------------------------------
-    for i, b in enumerate(boxes):
+    for i,b in enumerate(boxes):
         if not boxes_spun[i] and distance(player.position, b.position)<box_spin_distance:
             interaction_text.text='Approach to spin the box'
             b.animate_rotation_y(b.rotation_y + 360, duration=1)
@@ -128,10 +120,10 @@ def update():
             score += 100
             score_text.text=f'Score: {score}'
             points_display.text='+100 Points!'
-            print(f"Box {i+1} spun! +100 Points")
+            print(f"Box  {i+1} spun! +100 Points")
 
-    #redboxes: subtract points ------------------------------------------------------------------
-    for i, r in enumerate(red_boxes):
+    #redboxes: to subatract points ------------------------------------------------------------------
+    for i,r in enumerate(red_boxes):
         if not red_boxes_hit[i] and distance(player.position, r.position) < red_box_distance:
             red_boxes_hit[i]=True
             score-=50
