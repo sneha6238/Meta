@@ -49,7 +49,7 @@ key=Entity(
 
 #player--------------------------------------------------------------------------------------------------------- ---
 player= FirstPersonController()
-player.y=2
+player.y=2.5
 player.gravity=0.5
 player.cursor.visible=True,
 player.has_key=False
