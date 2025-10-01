@@ -2,7 +2,7 @@
 from vpython import *
 import math,time
 
-scene.title="Mini solar SYsytem -contains few planets"
+scene.title="Mini solar SYsytem "
 scene.width=900
 scene.height=600
 scene.background=color.black
